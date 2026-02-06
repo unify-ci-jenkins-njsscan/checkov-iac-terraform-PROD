@@ -95,6 +95,16 @@ pipeline {
               '''
           }
       }
+      stage('Security Scan') {
+            steps {
+                registerSecurityScan(
+                    // Security Scan to include
+                    artifacts: "$CHECKOV_TARGET_DIR/results.sarif",
+                    format: "sarif",
+                    archive: true
+                )
+            }
+        }
 
       stage('Display SARIF Report') {
         steps {
@@ -106,16 +116,6 @@ pipeline {
         }
     }
     }
-    stage('Security Scan') {
-            steps {
-                registerSecurityScan(
-                    // Security Scan to include
-                    artifacts: "$CHECKOV_TARGET_DIR/results.sarif",
-                    format: "sarif",
-                    archive: true
-                )
-            }
-        }
 
 //    post {
 //     always {
